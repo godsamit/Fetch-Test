@@ -2,6 +2,9 @@ import type { MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { getSession, commitSession } from "~/sessions";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -69,9 +72,15 @@ export default function Index() {
       </div>
       {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
       <Form method="post" className="flex flex-col">
-        <input type="text" name="name" placeholder="Your Name" />
-        <input type="email" name="email" placeholder="Your Email" />
-        <button type="submit">Login</button>
+        <div className="mb-4">
+          <Label htmlFor="name">Name</Label>
+          <Input type="text" name="name" placeholder="Your Name" />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" name="email" placeholder="Your Email" />
+        </div>
+        <Button className="w-full" type="submit">Login</Button>
       </Form>
     </div>
   );
