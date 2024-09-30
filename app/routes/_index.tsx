@@ -9,7 +9,7 @@ export const loader = async ({ request }: { request: Request}) => {
     return redirect("/login");
   }
 
-  return redirect("/search/results");
+  return redirect("/search");
 };
 
 export default function Index() {

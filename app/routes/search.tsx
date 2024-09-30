@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import { getSession } from "~/sessions";
-import type { DogFilter, DogsSearchResponse } from "~/utils/types";
+import type { Dog, DogsSearchResponse, DogFilter } from "~/utils/types";
 import { Filters } from "~/components/Filters";
+import { DogList } from "~/components/DogList";
 import { DEFAULT_SORT } from "~/utils/constants";
 
 export const loader = async ({ request }: { request: Request }) => {
@@ -11,30 +12,52 @@ export const loader = async ({ request }: { request: Request }) => {
   const authToken = session.get("fetch-access-token");
   if (!authToken) {
     return redirect("/login");
-  } 
-  const url = new URL(request.url)
-  if (url.pathname === "/search") {
-    return redirect("/search/results" + url.search);
   }
-  // Call the breeds API with the cookie
-  const response = await fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
+  const url = new URL(request.url);
+  const apiUrl = new URL("https://frontend-take-home-service.fetch.com/dogs/search");
+
+  apiUrl.search = url.search;
+  const idsResponse = await fetch(apiUrl.toString(), {
+    method: "GET",
     headers: {
+      "Content-Type": "application/json",
       Cookie: `fetch-access-token=${authToken}`,
     },
-    credentials: "include", // Ensure cookies are sent with the request
+    credentials: "include"
   });
 
-  if (!response.ok) {
-    throw new Response("Failed to fetch breeds", { status: response.status });
+  if (!idsResponse.ok) {
+    throw new Response("Failed to fetch initial dog search", { status: idsResponse.status, statusText: 'ids' });
   }
 
-  const breeds = await response.json();
+  const dogSearchMeta = await idsResponse.json();
 
-  return json({ breeds });
+  const { resultIds } = dogSearchMeta;
+  const dogsResponse = await fetch("https://frontend-take-home-service.fetch.com/dogs", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `fetch-access-token=${authToken}`,
+    },
+    body: JSON.stringify(resultIds),
+    credentials: "include",
+  });
+
+  if (!dogsResponse.ok) {
+    throw new Response("Failed to fetch dog data", { status: dogsResponse.status, statusText: 'dogs' });
+  }
+
+  const dogs = await dogsResponse.json()
+
+  return json({ dogSearchMeta, dogs });
 };
 
 export default function Search () {
-  const { breeds } = useLoaderData<{ breeds: string[], dogs: DogsSearchResponse }>();
+  const { dogSearchMeta, dogs } = useLoaderData<{ 
+    dogSearchMeta: DogsSearchResponse,
+    dogs: Dog[]
+  }>();
+
   const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState<Partial<DogFilter>>({
     breeds: searchParams.getAll("breeds") || [],
@@ -70,16 +93,16 @@ export default function Search () {
       query.set('sort', filters.sort);
     }
 
-    navigate(`results?${query.toString()}`, { replace: true });
+    navigate(`?${query.toString()}`, { replace: true });
   };
 
   return (
     <main className="flex h-screen items-center justify-center">
       <section className="h-full flex-shrink-0x">
-        <Filters breeds={breeds} filters={filters} setFilters={setFilters} handleSubmit={handleSubmit}/>
+        <Filters filters={filters} setFilters={setFilters} handleSubmit={handleSubmit}/>
       </section>
       <section className="flex-1 h-full bg-muted">
-        <Outlet />
+        <DogList dogs={dogs} dogSearchMeta={dogSearchMeta} />
       </section>
     </main>
   );

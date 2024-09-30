@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFetcher } from "@remix-run/react";
 import { cn } from "~/lib/utils";
 import { CaretSortIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons"
 import { Button } from "~/components/ui/button";
@@ -16,17 +17,22 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover"
 import { Label } from "~/components/ui/label";
+import { LoaderIcon } from "lucide-react";
  
 
 export function BreedFilter({ 
-  breeds, 
   selectedBreeds, 
   updateFilter 
 } : { 
-  breeds: string[], 
   selectedBreeds: string[] | undefined, 
   updateFilter: (value: string) => void 
 }) {
+  const fetcher = useFetcher<{ breeds: string[] }>();
+
+  useEffect(() => {
+    fetcher.load("/api/breeds")
+  }, [fetcher]);
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,9 +57,11 @@ export function BreedFilter({
           <Command>
             <CommandInput placeholder="Search breeds..." className="h-9" />
             <CommandList>
-              <CommandEmpty>No breed found.</CommandEmpty>
+              <CommandEmpty>
+                <LoaderIcon className="animate-spin "/>
+              </CommandEmpty>
               <CommandGroup>
-                {breeds.map((breed) => (
+                {fetcher.state !== "loading" && fetcher.data?.breeds.map((breed) => (
                   <CommandItem
                     className="gap-2 cursor-pointer"
                     key={breed}

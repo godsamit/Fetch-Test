@@ -8,12 +8,10 @@ import { ButtonGroup } from "~/components/ui/button-group";
 import { DEFAULT_SORT, SORTABLE_FIELDS } from "~/utils/constants";
 
 export const Filters = ({ 
-  breeds, 
   filters, 
   setFilters, 
   handleSubmit 
-} : { 
-  breeds: string[], 
+} : {
   filters: Partial<DogFilter>,
   setFilters: React.Dispatch<React.SetStateAction<Partial<DogFilter>>>,
   handleSubmit: (e: React.FormEvent<HTMLFormElement>, filters: Partial<DogFilter>) => void 
@@ -47,8 +45,7 @@ export const Filters = ({
         <div className="h-full flex flex-col gap-8 w-[250px]">
           <section className="flex flex-col gap-4">
             <h1 className="font-bold">Filter</h1>
-            <BreedFilter 
-              breeds={breeds} 
+            <BreedFilter
               selectedBreeds={filters.breeds} 
               updateFilter={updateFilter("breeds")} 
             />
