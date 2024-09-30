@@ -5,7 +5,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import type { MetaFunction, LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
 
@@ -21,6 +22,24 @@ export const links: LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Fetch Take Home Test" },
+    { name: "description", content: "Fetch Take Home Test Submission by Yushan Liu" },
+  ];
+};
+
+export const loader = (async ({ request }: { request: Request }) => {
+  const { pathname, search } = new URL(request.url);
+
+  if (pathname.endsWith('/') && pathname !== '/') {
+    // Redirect to the same URL without a trailing slash
+    throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
+  }
+
+  return null;
+})
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,0 +1,28 @@
+import type { Dog } from "~/utils/types";
+import { Card } from "~/components/ui/card";
+ 
+export const DogCard = ({ 
+  dog, 
+  setFavorite 
+} : { 
+  dog: Dog, 
+  setFavorite: React.Dispatch<React.SetStateAction<Dog[]>>
+}) => {
+  return (
+    <Card className="basis-[16rem] flex-shrink-0">
+      <img 
+        src={dog.img} 
+        alt={dog.name} 
+        className="w-full h-48 object-cover rounded-t-xl" 
+      />
+      <div className="flex p-4 flex-col">
+        <h1 className="text-2xl text-primary font-bold">{dog.name}</h1>
+        <h2 className="text-base text-primary">{dog.breed}</h2>
+        <div className="flex justify-between mt-1.5" >
+          <h3 className="text-sm opacity-50 font-bold">Age: {dog.age}</h3>
+          <h4 className="text-sm opacity-50 font-bold">Zip Code: {dog.zip_code}</h4>
+        </div>
+      </div>
+    </Card>
+  );
+}

@@ -7,6 +7,24 @@ export interface Dog {
   breed: string
 }
 
+export interface DogFilter {
+  breeds: string[];
+  zipCodes: string[];
+  ageMin: number;
+  ageMax: number;
+
+  size: number;
+  from: number;
+  sort : string;
+}
+
+export interface DogsSearchResponse {
+  resultIds: unknown[],
+  total: number,
+  next: string,
+  prev: string,
+}
+
 export interface Location {
   zip_code: string
   latitude: number

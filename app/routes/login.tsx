@@ -1,16 +1,19 @@
-import type { MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { getSession, commitSession } from "~/sessions";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
+import { Card } from "~/components/ui/card";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Fetch Take Home Test" },
-    { name: "description", content: "Fetch Take Home Test Submission by Yushan Liu" },
-  ];
+export const loader = async ({ request }: { request: Request}) => {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (!session.get("fetch-access-token")) {
+    return null;
+  }
+
+  return redirect("/search");
 };
 
 export const action = async ({ request }: { request: Request }) => {
@@ -64,24 +67,26 @@ export default function Index() {
   const actionData = useActionData();
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center">
-      <div className="flex flex-col items-center justify-center my-10">
-        <img src="/fetch_rewards_logo.jpg" alt="Fetch Rewards Logo" />
-        <h1 className="text-3xl font-bold">Fetch Dog Search!</h1>
-        <p className="text-base">This is a dog search engine built with React/Remix.</p>
-      </div>
-      {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-      <Form method="post" className="flex flex-col">
-        <div className="mb-4">
-          <Label htmlFor="name">Name</Label>
-          <Input type="text" name="name" placeholder="Your Name" />
+    <main className="flex flex-col h-screen items-center justify-center bg-muted">
+      <Card className="p-10">
+        <div className="flex flex-col items-center justify-center my-6 gap-2.5">
+          <img className="w-32 h-32" src="/fetch_rewards_logo.jpg" alt="Fetch Rewards Logo" />
+          <h1 className="text-3xl font-bold">Fetch Dog Search</h1>
+          <p className="text-base">Find the shelter dog of your dreams with this React/Remix app!</p>
         </div>
-        <div className="mb-4">
-          <Label htmlFor="email">Email</Label>
-          <Input type="email" name="email" placeholder="Your Email" />
-        </div>
-        <Button className="w-full" type="submit">Login</Button>
-      </Form>
-    </div>
+        {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
+        <Form method="post" className="flex flex-col">
+          <div className="mb-4">
+            <Label htmlFor="name">Name</Label>
+            <Input type="text" name="name" placeholder="Your Name" />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="email">Email</Label>
+            <Input type="email" name="email" placeholder="Your Email" />
+          </div>
+          <Button className="h-10 mt-4 w-full text-lg font-bold" type="submit">Login</Button>
+        </Form>
+      </Card>
+    </main>
   );
 }
