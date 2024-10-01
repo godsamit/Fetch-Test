@@ -30,6 +30,7 @@ export const Sorter = ({
 
   return (
     <Button
+      type="button"
       variant={isCurrent ? "default" : "outline"}
       onClick={handleClick}
       className={cn("flex-1 flex gap-0.5 min-w-0", className)}

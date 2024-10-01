@@ -1,17 +1,21 @@
 import { Form } from "@remix-run/react";
 import type { DogFilter } from "~/utils/types";
+import { MapFilter } from "./MapFilter";
 import { BreedFilter } from "./BreedFilter";
 import { AgeFilter } from "./AgeFilter";
 import { Sorter } from "./Sorter";
 import { Button } from "~/components/ui/button";
 import { ButtonGroup } from "~/components/ui/button-group";
 import { DEFAULT_SORT, SORTABLE_FIELDS } from "~/utils/constants";
+import { cn } from "~/lib/utils";
 
 export const Filters = ({ 
+  isLoading,
   filters, 
   setFilters, 
   handleSubmit 
 } : {
+  isLoading: boolean,
   filters: Partial<DogFilter>,
   setFilters: React.Dispatch<React.SetStateAction<Partial<DogFilter>>>,
   handleSubmit: (e: React.FormEvent<HTMLFormElement>, filters: Partial<DogFilter>) => void 
@@ -40,8 +44,11 @@ export const Filters = ({
   }
 
   return (
-    <article className="p-6 h-screen mb-auto">
-      <Form className="h-full" onSubmit={(e) => handleSubmit(e, filters)}>
+    <article className={cn(
+      "p-6 h-screen mb-auto shadow-2xl",
+      isLoading && "opacity-50 pointer-events-none"
+    )}>
+      <Form className="h-full no-scrollbar" onSubmit={(e) => handleSubmit(e, filters)}>
         <div className="h-full flex flex-col gap-8 w-[250px]">
           <section className="flex flex-col gap-4">
             <h1 className="font-bold">Filter</h1>
@@ -57,6 +64,7 @@ export const Filters = ({
               } 
               updateFilter={updateFilter("ageRange")}
             />
+            <MapFilter onBoundingBoxChange={updateFilter("geoBoundingBox")} />
           </section>
           <section className="flex flex-col gap-4">
             <h1 className="font-bold">Sort</h1>

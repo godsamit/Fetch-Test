@@ -19,7 +19,7 @@ export const ButtonGroup = ({
   const isVertical = orientation === 'vertical';
 
   return (
-    <div
+    <article
       className={cn(
         'flex',
         {
@@ -48,6 +48,6 @@ export const ButtonGroup = ({
           ),
         });
       })}
-    </div>
+    </article>
   );
 };

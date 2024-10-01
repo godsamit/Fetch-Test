@@ -30,13 +30,15 @@ export function BreedFilter({
   const fetcher = useFetcher<{ breeds: string[] }>();
 
   useEffect(() => {
-    fetcher.load("/api/breeds")
+    if (fetcher.state === "idle" && !fetcher.data) {
+      fetcher.load('/api/breeds');
+    }
   }, [fetcher]);
 
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col gap-2 items-start justify-between">
+    <article className="flex flex-col gap-2 items-start justify-between">
       <Label htmlFor="breed">Select a breed</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>            
@@ -57,7 +59,7 @@ export function BreedFilter({
           <Command>
             <CommandInput placeholder="Search breeds..." className="h-9" />
             <CommandList>
-              <CommandEmpty>
+              <CommandEmpty className="flex items-center justify-center">
                 <LoaderIcon className="animate-spin "/>
               </CommandEmpty>
               <CommandGroup>
@@ -91,6 +93,6 @@ export function BreedFilter({
           </Command>
         </PopoverContent>
       </Popover>
-    </div>
+    </article>
   );
 }

@@ -9,21 +9,23 @@ export const loader = async ({ request }: { request: Request }) => {
     throw new Response("Unauthorized", { status: 401 });
   }
 
-  const response = await fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `fetch-access-token=${authToken}`,
-    },
-    credentials: "include", // Ensure cookies are sent with the request
-  });
+  try {
+    const response = await fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `fetch-access-token=${authToken}`,
+      },
+      credentials: "include", // Ensure cookies are sent with the request
+    });
 
-  console.log(response);
+    if (!response.ok) {
+      throw new Response("Failed to fetch breeds", { status: response.status, statusText: 'breeds' });
+    }
 
-  if (!response.ok) {
-    throw new Response("Failed to fetch breeds", { status: response.status, statusText: 'breeds' });
+    const breeds = await response.json();
+
+    return json({ breeds });
+  } catch (error) {
+    return json({ error: "Failed to fetch breeds", status: 500 });
   }
-
-  const breeds = await response.json();
-
-  return json({ breeds });
 };

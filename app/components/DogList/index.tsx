@@ -38,7 +38,7 @@ export const DogList = ({
 
 
   return (
-    <section className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 gap-4">
+    <section className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 pr-0 gap-4">
       {navigation.state === "loading" && 
         <section className="flex-1 flex items-center justify-center">
             <LoaderIcon className="animate-spin" />
@@ -50,7 +50,7 @@ export const DogList = ({
         </section>
       }
       {navigation.state==="idle" && 
-        <section className="flex-1 flex min-h-0 overflow-y-auto flex-wrap gap-4">
+        <section className="flex min-h-0 overflow-y-auto flex-wrap gap-4">
           {dogs.map((dog) => (
             <DogCard 
               key={dog.id} 

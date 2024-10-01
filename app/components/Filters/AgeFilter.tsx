@@ -10,11 +10,11 @@ export const AgeFilter = ({
   currentRange: number[] | undefined 
 }) => {
   return (
-    <div className="flex flex-col gap-2 items-start justify-between">
+    <article className="flex flex-col items-start justify-between">
       <Label htmlFor="age">Age Range</Label>
       <Slider 
         name="age" 
-        className="h-10"
+        className="h-10 mb-4"
         value={currentRange} 
         defaultValue={AGE_RANGE} 
         min={0} 
@@ -26,6 +26,6 @@ export const AgeFilter = ({
           value !== undefined ? `${value} yr${value > 1 ? "s" : ""}` : "None"
         }
       />
-    </div>
+    </article>
   );
 }

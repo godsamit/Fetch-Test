@@ -9,7 +9,11 @@ export interface Dog {
 
 export interface DogFilter {
   breeds: string[];
-  zipCodes: string[];
+  geoBoundingBox?: { 
+    top_right: { lat: number, lon: number }, 
+    bottom_left: { lat: number, lon: number }
+  };
+  zipCodes?: string[];
   ageMin: number;
   ageMax: number;
 
