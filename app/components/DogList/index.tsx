@@ -1,10 +1,9 @@
-import type { DogsSearchResponse,Dog } from "~/utils/types"
-import { useState } from "react";
+import type { DogsSearchResponse, Dog, FavoriteList } from "~/utils/types"
 import { DogCard } from "./DogCard";
 import { DogListPagination } from "./DogListPagination";
-import { useNavigate, useSearchParams, useNavigation } from "@remix-run/react";
+import { useEffect } from "react";
+import { useFetcher, useNavigation } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
-import { DEFAULT_PAGE_SIZE } from "~/utils/constants";
 
 export const DogList = ({ 
   dogSearchMeta, 
@@ -13,29 +12,28 @@ export const DogList = ({
   dogSearchMeta: DogsSearchResponse, 
   dogs: Dog[] 
 }) => {
-  // Store favorite dogs
-  const [favorite, setFavorite] = useState<Dog[]>([]);
-
+  const fetcher = useFetcher<FavoriteList>();
   const navigation = useNavigation();
 
-  /* pagination logic */
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const favorites = fetcher.data?.favorite || [];
 
-  const pageSize = searchParams.get("size") ? parseInt(searchParams.get("size")!) : DEFAULT_PAGE_SIZE;
-  const from = searchParams.get("from") ? parseInt(searchParams.get("from")!) : 0;
-
-  const handlePageChange = (page: number) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (page === 1) {
-      newSearchParams.delete("from");
-    } else {
-      newSearchParams.set("from", ((page - 1) * pageSize).toString());
+  useEffect(() => {
+    if (fetcher.state === "idle" && !fetcher.data) {
+      fetcher.load("/cookie_state/favorites");      
     }
-    navigate(`?${newSearchParams.toString()}`, { replace: true });
-  }
-  /* pagination logic */
+  }, [fetcher]);
 
+  const handleToggleFavorite = (id: string) => {
+    fetcher.submit({
+      favorite: favorites.includes(id)
+        ? favorites.filter((favorite) => favorite !== id)
+        : [...favorites, id],
+    }, {
+      action: "/cookie_state/favorites", 
+      method: "POST", 
+      encType: "application/json",
+    });
+  };
 
   return (
     <section className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 pr-0 gap-4">
@@ -44,7 +42,7 @@ export const DogList = ({
             <LoaderIcon className="animate-spin" />
           </section>
       }
-      {navigation.state==="idle" && dogs.length === 0 && 
+      {navigation.state==="idle" && dogs?.length === 0 && 
         <section className="flex-1 flex overflow-y-auto items-center justify-center">
           <p>No dogs found</p>
         </section>
@@ -54,16 +52,15 @@ export const DogList = ({
           {dogs.map((dog) => (
             <DogCard 
               key={dog.id} 
-              dog={dog} 
-              setFavorite={setFavorite} 
+              dog={dog}
+              isFavorite={favorites.includes(dog.id)}
+              onToggleFavorite={handleToggleFavorite}
             />
           ))}
         </section>
       }
       <DogListPagination
-        totalPages={Math.ceil(dogSearchMeta.total/pageSize)}
-        currentPage={from / pageSize + 1}
-        onPageChange={handlePageChange}
+        dogSearchMeta={dogSearchMeta}
       />
     </section>
   )

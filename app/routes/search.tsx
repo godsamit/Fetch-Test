@@ -63,13 +63,12 @@ export default function Search () {
   }>();
 
   const [searchParams] = useSearchParams();
-  const fetcher = useFetcher<{zipCodes: string[]}>({ key: "zipCodeFetch "});
+  const fetcher = useFetcher();
 
   const [filters, setFilters] = useState<Partial<DogFilter>>(searchParamToFilter(searchParams));
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     fetcher.submit(filters, {
       method: "post", 
       action: "/api/search",
@@ -90,6 +89,7 @@ export default function Search () {
       <section className="flex-1 h-full bg-muted">
         <DogList dogs={dogs} dogSearchMeta={dogSearchMeta} />
       </section>
+
     </main>
   );
 }

@@ -78,6 +78,19 @@ body {
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+.pulse {
+  animation: pulse 0.5s ease-in-out;
+}
+
 @layer base {
   * {
     @apply border-border;

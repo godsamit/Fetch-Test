@@ -10,8 +10,8 @@ export interface Dog {
 export interface DogFilter {
   breeds: string[];
   geoBoundingBox?: { 
-    top_right: { lat: number, lon: number }, 
-    bottom_left: { lat: number, lon: number }
+    top_right: Coordinates, 
+    bottom_left: Coordinates,
   };
   zipCodes?: string[];
   ageMin: number;
@@ -38,7 +38,11 @@ export interface Location {
   county: string
 }
 
-export interface Coordinates {
+interface Coordinates {
   lat: number;
   lon: number;
+}
+
+export interface FavoriteList {
+  favorite: string[]
 }

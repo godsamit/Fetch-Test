@@ -7,7 +7,6 @@ import {
 } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
-
 import "./tailwind.css";
 
 export const links: LinksFunction = () => [

@@ -38,7 +38,7 @@ export const MapWithBoundingBox = ({
 
   // Handle data loading. key attribute to share fetcher instance with other components
   // Here to handle initial loading
-  const fetcher = useFetcher<{zipCodes: string[]}>({ key: "zipCodeFetch "});
+  const fetcher = useFetcher();
 
   const { isLoaded } = useJsApiLoader({
     /* 
