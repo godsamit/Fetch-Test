@@ -7,6 +7,6 @@ npm run dev
 ```
 
 # Self Boasting Time
-
 - Google maps integration.
-- Cookie states for favorite dogs and matched dog.
+- Cookie states for favorite dogs and matched dog, resistant to user refresh.
+- Responsive design, UIUX, and some simple animations.
