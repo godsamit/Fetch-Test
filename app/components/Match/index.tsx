@@ -5,7 +5,8 @@ import { Card } from "~/components/ui/card";
 
 export const MatchCard = ({ matchedDog } : { matchedDog: Dog }) => {
   useEffect(() => {
-    if (matchedDog) {
+    // confetti runs on the client side cos it needs the window object
+    if (typeof document !== "undefined" && matchedDog) {
       requestAnimationFrame(() => {
         confetti({
           particleCount: 100,
@@ -27,7 +28,10 @@ export const MatchCard = ({ matchedDog } : { matchedDog: Dog }) => {
     return (
       <Card className="w-full p-10 flex flex-col gap-6">
         <h1 className="text-2xl font-bold">No Match Found...</h1>
-        <p>You don&rsquo;t have a match yet.</p>
+        <p>
+          You don&rsquo;t have a match yet. <br />
+          When you&rsquo;re done selecting your favorite dogs, expand the right panel, click the &ldquo;Match&rdquo; button to see your match here.
+        </p>
       </Card>
     )
   }

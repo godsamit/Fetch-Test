@@ -20,9 +20,13 @@ export const DogListPagination = ({
 }) => {
   const navigation = useNavigation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  if (!dogSearchMeta) {
+    return null;
+  }
 
   // Get current page config
-  const [searchParams] = useSearchParams();
   const pageSize = searchParams.get("size") ? parseInt(searchParams.get("size")!) : DEFAULT_PAGE_SIZE;
   const from = searchParams.get("from") ? parseInt(searchParams.get("from")!) : 0;
   const currentPage = Math.floor(from / pageSize) + 1;

@@ -16,6 +16,12 @@ export const loader = async ({ request }: { request: Request }) => {
   }
   const url = new URL(request.url);
 
+  // The map container will redirect and apply zip code filters on load
+  // So doing this to prevent the initial flash
+  if (!url.searchParams.has("zipCodes")) {
+    return json({});
+  }
+
   const apiUrl = new URL("https://frontend-take-home-service.fetch.com/dogs/search");
 
   apiUrl.search = url.search;
@@ -72,7 +78,10 @@ export default function Search () {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetcher.submit(filters as Record<string, string>, {
+    fetcher.submit({
+      ...filters,
+      currentSearch: searchParams.toString(),
+    }, {
       method: "post", 
       action: "/api/search",
       encType: "application/json",

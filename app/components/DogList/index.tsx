@@ -42,10 +42,10 @@ export const DogList = ({
 
   return (
     <div className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 gap-4">
-      {navigation.state === "loading" && 
+      {(navigation.state === "loading" || !dogs) && 
         <section className="flex-1 flex items-center justify-center">
-            <LoaderIcon className="animate-spin" />
-          </section>
+          <LoaderIcon className="animate-spin" />
+        </section>
       }
       {navigation.state==="idle" && dogs?.length === 0 && 
         <section className="flex-1 flex overflow-y-auto items-center justify-center">
@@ -54,7 +54,7 @@ export const DogList = ({
       }
       {navigation.state==="idle" && 
         <section className="flex min-h-0 overflow-y-auto flex-wrap gap-4">
-          {dogs.map((dog) => (
+          {dogs?.map((dog) => (
             <DogCard 
               key={dog.id} 
               dog={dog}

@@ -32,6 +32,14 @@ export const FavoriteListContent = ({
       >
         Your favorite dogs:
       </h1>
+      {favorites?.length === 0 && 
+        <section className="flex-1 flex overflow-y-auto items-center justify-center">
+          <p className="max-w-[50ch]">
+            You haven&rsquo;t selected any dogs yet.<br />
+            Search and find your favorite dogs. Then use the &ldquo;Match&rdquo; button below to see your match!
+          </p>
+        </section>
+      }
       <section className="flex min-h-0 overflow-y-auto flex-wrap gap-4">
         {favorites?.map((dog) => 
           <DogCard

@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState, useCallback, memo } from 'react';
-import { useFetcher } from '@remix-run/react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { useFetcher, useSearchParams } from '@remix-run/react';
 import { useJsApiLoader, GoogleMap, StandaloneSearchBox } from '@react-google-maps/api';
 import type { Libraries } from '@react-google-maps/api';
 import { Input } from '~/components/ui/input';
@@ -24,7 +24,7 @@ export const MapWithBoundingBox = ({
   // Ensure this component runs on the client side
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
-    if (window) setIsClient(true);
+    if (typeof document !== "undefined") setIsClient(true);
   }, []);
 
   const [map, setMap] = useState<google.maps.Map>();
@@ -36,9 +36,8 @@ export const MapWithBoundingBox = ({
   const [userLocationDetermined, setUserLocationDetermined] = useState(false);
   const [initFetched, setInitFetched] = useState(false);
 
-  // Handle data loading. key attribute to share fetcher instance with other components
-  // Here to handle initial loading
   const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
 
   const { isLoaded } = useJsApiLoader({
     /* 
@@ -92,6 +91,7 @@ export const MapWithBoundingBox = ({
         top_right: { lat: northEast.lat(), lon: northEast.lng() },
         bottom_left: { lat: southWest.lat(), lon: southWest.lng() },
       },
+      currentSearch: searchParams.toString(),
     }, { 
       action: "/api/search", 
       method: "POST", 
@@ -99,7 +99,7 @@ export const MapWithBoundingBox = ({
     });
 
     setInitFetched(true);
-  }, [map, userLocationDetermined, fetcher, initFetched, setInitFetched]);
+  }, [map, searchParams, userLocationDetermined, fetcher, initFetched, setInitFetched]);
 
   // This effect is a catch-all case, which fires when the user rejects or already have set the location access.
   // Since handleInitialSearch is triggered on idle, when user rejects the request, the map will not reload 
