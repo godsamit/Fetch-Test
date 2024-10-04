@@ -8,23 +8,23 @@ import type {
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
-import { favorites } from "~/cookie_state/favorite";
+import { favorite } from "~/cookie_state/favorite";
 
 export async function loader({ request } : LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await favorites.parse(cookieHeader)) || {};
+  const cookie = (await favorite.parse(cookieHeader)) || {};
   return json({ favorite: cookie.favorite || [] });
 }
 
 export async function action({ request } : ActionFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await favorites.parse(cookieHeader)) || {};
+  const cookie = (await favorite.parse(cookieHeader)) || {};
   const { favorite : newFavorites } = await request.json();
   cookie.favorite = newFavorites;
 
   return json({ favorite: newFavorites }, {
     headers: {
-      "Set-Cookie": await favorites.serialize(cookie),
+      "Set-Cookie": await favorite.serialize(cookie),
     }
   });
 }

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useLoaderData, useSearchParams, useFetcher } from "@remix-run/react";
+import { useLoaderData, useSearchParams, useFetcher, useNavigation } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import { getSession } from "~/sessions";
 import type { Dog, DogsSearchResponse, DogFilter } from "~/utils/types";
 import { Filters } from "~/components/Filters";
 import { DogList } from "~/components/DogList";
+import { Favorite } from "~/components/Favorite";
 import { searchParamToFilter } from "~/utils/searchParamParser";
 
 export const loader = async ({ request }: { request: Request }) => {
@@ -14,6 +15,7 @@ export const loader = async ({ request }: { request: Request }) => {
     return redirect("/login");
   }
   const url = new URL(request.url);
+
   const apiUrl = new URL("https://frontend-take-home-service.fetch.com/dogs/search");
 
   apiUrl.search = url.search;
@@ -64,12 +66,13 @@ export default function Search () {
 
   const [searchParams] = useSearchParams();
   const fetcher = useFetcher();
+  const navigation = useNavigation();
 
   const [filters, setFilters] = useState<Partial<DogFilter>>(searchParamToFilter(searchParams));
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetcher.submit(filters, {
+    fetcher.submit(filters as Record<string, string>, {
       method: "post", 
       action: "/api/search",
       encType: "application/json",
@@ -77,10 +80,10 @@ export default function Search () {
   };
 
   return (
-    <main className="flex h-screen items-center justify-center">
+    <main className="flex w-screen h-screen items-center justify-center overflow-hidden relative">
       <section className="h-full flex-shrink-0x">
         <Filters 
-          isLoading={fetcher.state === "submitting" || fetcher.state === "loading"} 
+          isLoading={fetcher.state !== "idle" || navigation.state !== "idle"} 
           filters={filters} 
           setFilters={setFilters} 
           handleSubmit={handleSubmit}
@@ -89,7 +92,7 @@ export default function Search () {
       <section className="flex-1 h-full bg-muted">
         <DogList dogs={dogs} dogSearchMeta={dogSearchMeta} />
       </section>
-
+      <Favorite />
     </main>
   );
 }

@@ -4,6 +4,7 @@ import { DogListPagination } from "./DogListPagination";
 import { useEffect } from "react";
 import { useFetcher, useNavigation } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
+import { toggleFavorite } from "~/cookie_state/favorite";
 
 export const DogList = ({ 
   dogSearchMeta, 
@@ -23,11 +24,15 @@ export const DogList = ({
     }
   }, [fetcher]);
 
-  const handleToggleFavorite = (id: string) => {
+  /* 
+    useFetcher is designed to be very coupled with the component
+    Duplication of logic is intentional.
+  */
+  const handleToggleFavorite = (dog: Dog) => {
     fetcher.submit({
-      favorite: favorites.includes(id)
-        ? favorites.filter((favorite) => favorite !== id)
-        : [...favorites, id],
+      favorite: favorites.some((favoriteDog) => favoriteDog.id === dog.id)
+        ? favorites.filter((favoriteDog) => favoriteDog.id !== dog.id)
+        : [...favorites, dog],
     }, {
       action: "/cookie_state/favorites", 
       method: "POST", 
@@ -36,7 +41,7 @@ export const DogList = ({
   };
 
   return (
-    <section className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 pr-0 gap-4">
+    <div className="flex flex-col flex-1 h-full overflow-hidden min-h-full p-6 gap-4">
       {navigation.state === "loading" && 
         <section className="flex-1 flex items-center justify-center">
             <LoaderIcon className="animate-spin" />
@@ -53,7 +58,7 @@ export const DogList = ({
             <DogCard 
               key={dog.id} 
               dog={dog}
-              isFavorite={favorites.includes(dog.id)}
+              isFavorite={favorites.some((favoriteDog) => favoriteDog.id === dog.id)}
               onToggleFavorite={handleToggleFavorite}
             />
           ))}
@@ -62,6 +67,6 @@ export const DogList = ({
       <DogListPagination
         dogSearchMeta={dogSearchMeta}
       />
-    </section>
+    </div>
   )
 };

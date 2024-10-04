@@ -69,7 +69,7 @@ export const MapWithBoundingBox = ({
           console.error("Geolocation failed or was blocked.");
           setUserLocationDetermined(true);
         }, 
-        { timeout: 6000}
+        { timeout: 6000 }
       );
     } else {
       setUserLocationDetermined(true);
@@ -158,7 +158,7 @@ export const MapWithBoundingBox = ({
               <Input
                 name="city"
                 type="text"
-                placeholder="Enter a city"
+                placeholder="Enter a place!"
                 className="w-full"
               />
             </StandaloneSearchBox>

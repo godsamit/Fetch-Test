@@ -44,5 +44,9 @@ interface Coordinates {
 }
 
 export interface FavoriteList {
-  favorite: string[]
+  favorite: Dog[]
+}
+
+export interface Match {
+  match: string
 }

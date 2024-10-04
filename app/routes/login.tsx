@@ -1,5 +1,5 @@
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { getSession, commitSession } from "~/sessions";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -66,8 +66,9 @@ export const action = async ({ request }: { request: Request }) => {
   }
 };
 
-export default function Index() {
+export default function Login() {
   const actionData = useActionData();
+  const navigation = useNavigation();
 
   return (
     <main className="flex flex-col h-screen items-center justify-center bg-muted">
@@ -87,7 +88,14 @@ export default function Index() {
             <Label htmlFor="email">Email</Label>
             <Input type="email" name="email" placeholder="Your Email" />
           </div>
-          <Button className="h-10 mt-4 w-full text-lg font-bold" type="submit">Login</Button>
+          <Button 
+            className="h-10 mt-4 w-full text-lg font-bold" 
+            type="submit"
+            disabled={navigation.state !== "idle"}
+            variant={navigation.state === "idle" ? "default" : "secondary"}
+          >
+            Login
+          </Button>
         </Form>
       </Card>
     </main>

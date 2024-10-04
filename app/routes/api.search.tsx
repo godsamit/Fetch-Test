@@ -10,8 +10,8 @@ export const action = async ({ request } : { request: Request }) => {
   }
 
   const filters : Partial<DogFilter> = await request.json()
-  const { ageMin, ageMax, sort, geoBoundingBox, breeds, size } = filters;
-  
+  const { ageMin, ageMax, sort, geoBoundingBox, breeds, size, options } = filters;
+
   // Fetch zip codes if geoBoundingBox is provided
   let zipCodes : string[] = []
   if (geoBoundingBox) {
@@ -62,5 +62,5 @@ export const action = async ({ request } : { request: Request }) => {
     query.set('sort', sort);
   }
 
-  return redirect(`/search?${query.toString()}`);
+  return redirect(`/search?${query.toString()}`, options);
 }

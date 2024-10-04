@@ -45,10 +45,10 @@ export const Filters = ({
 
   return (
     <article className={cn(
-      "p-6 h-screen mb-auto shadow-2xl",
+      "h-screen mb-auto shadow-2xl",
       isLoading && "opacity-50 pointer-events-none"
     )}>
-      <Form className="h-full no-scrollbar" onSubmit={(e) => handleSubmit(e, filters)}>
+      <Form className="p-6 h-full no-scrollbar overflow-y-auto" onSubmit={(e) => handleSubmit(e, filters)}>
         <div className="h-full flex flex-col gap-8 w-[250px]">
           <section className="flex flex-col gap-4">
             <h1 className="font-bold">Filter</h1>
@@ -82,6 +82,7 @@ export const Filters = ({
           <Button 
             className="w-full mt-auto" 
             type="submit"
+            variant={isLoading ? "secondary" : "default"}
           >
             Search!
           </Button>
