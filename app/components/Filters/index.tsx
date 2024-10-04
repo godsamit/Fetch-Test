@@ -1,9 +1,7 @@
-import { Form } from "@remix-run/react";
 import type { DogFilter } from "~/utils/types";
+import { useState } from "react";
 import { FilterPanel } from "./FilterPanel";
 import { FilterContent } from "./FilterContent";
-import { DEFAULT_SORT, SORTABLE_FIELDS } from "~/utils/constants";
-import { cn } from "~/lib/utils";
 
 export const Filters = ({ 
   isLoading,
@@ -20,15 +18,23 @@ export const Filters = ({
   setFiltersChanged: React.Dispatch<React.SetStateAction<boolean>>,
   handleSubmit: (e: React.FormEvent<HTMLFormElement>, filters: Partial<DogFilter>) => void 
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <FilterPanel>
+    <FilterPanel
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
       <FilterContent
         isLoading={isLoading} 
         filters={filters} 
         setFilters={setFilters}
         filtersChanged={filtersChanged}
         setFiltersChanged={setFiltersChanged}
-        handleSubmit={handleSubmit}
+        handleSubmit={(e: React.FormEvent<HTMLFormElement>, filters: Partial<DogFilter>) => {
+          setIsOpen(false);
+          handleSubmit(e, filters);
+        }}
       />
     </FilterPanel>
   )

@@ -1,15 +1,17 @@
-import { useState } from "react";
 import { useSearchParams } from "@remix-run/react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { TextAlignCenterIcon as FilterIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 export const FilterPanel = ({
+  isOpen,
+  setIsOpen,
   children,
 } : {
+  isOpen: boolean,
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   children:React.ReactNode,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [searchParams] = useSearchParams();
 
   return (
