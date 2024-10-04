@@ -16,7 +16,7 @@ export const FilterPanel = ({
     <>
       {!isOpen &&
         <Button
-          className="w-auto h-auto p-2 rounded-full fixed top-12 left-4 z-20 block md:hidden"
+          className="w-auto h-auto p-2 rounded-full fixed top-12 left-4 z-10 block md:hidden"
           title="Filters"
           aria-label="Configure Filters"
           onClick={() => setIsOpen(true)}
@@ -26,7 +26,7 @@ export const FilterPanel = ({
       }
       <aside 
         className={cn(
-          "transition-translate duration-1000 ease-in-out w-screen md:w-auto h-screen absolute md:static flex transform -translate-x-full md:translate-x-0 flex-shrink-0 z-20",
+          "transition-translate duration-1000 ease-in-out w-screen md:w-auto h-screen absolute md:static flex transform -translate-x-full md:translate-x-0 flex-shrink-0 z-10",
           isOpen && "translate-x-0"
         )}
       >

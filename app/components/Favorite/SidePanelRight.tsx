@@ -35,8 +35,8 @@ export const SidePanelRight = ({
     <>
       <div
         className={cn(
-          "fixed inset-0 bg-black/10 backdrop-blur-md transition-opacity duration-500 z-10",
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none" 
+          "fixed inset-0 bg-black/10 backdrop-blur-md transition-opacity duration-500",
+          isOpen ? "opacity-100 z-20" : "opacity-0 pointer-events-none z-0" 
         )}
         onClick={() => setIsOpen(false)}
         role="button"
@@ -50,8 +50,8 @@ export const SidePanelRight = ({
       />
       <aside 
         className={cn(
-          "transition-translate duration-1000 ease-in-out h-screen absolute right-12 w-[calc(100%+3rem)] md:w-[918px] flex transform translate-x-full z-10",
-          isOpen && "translate-x-12"
+          "transition-translate duration-1000 ease-in-out h-screen absolute right-12 w-[calc(100%+3rem)] md:w-[918px] flex transform translate-x-full",
+          isOpen ? "z-30 translate-x-12" : "z-0"
         )}
       >
         <div className="h-full w-12 flex items-center">
