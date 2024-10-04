@@ -1,3 +1,4 @@
+import type { Location } from "~/utils/types";
 import { useSearchParams } from "@remix-run/react";
 import { MapWithBoundingBox } from "./MapWithBoundingBox";
 import { Label } from "~/components/ui/label";
@@ -13,7 +14,13 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 export const MapFilter = ({ 
   onBoundingBoxChange
 } : { 
-  onBoundingBoxChange: (bbox: { top_right: { lat: number, lon: number }, bottom_left: { lat: number, lon: number } }) => void
+  onBoundingBoxChange: (
+    boundingBox: { 
+      top_right: Location,
+      bottom_left: Location,
+    },
+    silent?: boolean
+  ) => void
 }) => {
   const [searchParams] = useSearchParams();
 

@@ -49,7 +49,10 @@ export const DogList = ({
       }
       {navigation.state==="idle" && dogs?.length === 0 && 
         <section className="flex-1 flex overflow-y-auto items-center justify-center">
-          <p>No dogs found</p>
+          <p>
+            No dogs found.<br />
+            Update your filters and try again.
+          </p>
         </section>
       }
       {navigation.state==="idle" && 

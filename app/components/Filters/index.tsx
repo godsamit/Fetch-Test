@@ -11,16 +11,23 @@ import { cn } from "~/lib/utils";
 
 export const Filters = ({ 
   isLoading,
-  filters, 
-  setFilters, 
+  filters,
+  setFilters,
+  filtersChanged,
+  setFiltersChanged,
   handleSubmit 
 } : {
   isLoading: boolean,
   filters: Partial<DogFilter>,
   setFilters: React.Dispatch<React.SetStateAction<Partial<DogFilter>>>,
+  filtersChanged: boolean,
+  setFiltersChanged: React.Dispatch<React.SetStateAction<boolean>>,
   handleSubmit: (e: React.FormEvent<HTMLFormElement>, filters: Partial<DogFilter>) => void 
 }) => {
-  const updateFilter = (key: string) => (value: unknown) => {
+  // 'silent' is used to bypass filterChanged state update
+  // used for initial map loading
+  const updateFilter = (key: string) => (value: unknown, silent = false) => {
+    if (!filtersChanged && !silent) setFiltersChanged(true);
     switch(key) {
       case "ageRange": {
         setFilters((prevFilters) => ({ 
@@ -82,7 +89,8 @@ export const Filters = ({
           <Button 
             className="w-full mt-auto" 
             type="submit"
-            variant={isLoading ? "secondary" : "default"}
+            variant={(!filtersChanged || isLoading) ? "secondary" : "default"}
+            disabled={!filtersChanged || isLoading}
           >
             Search!
           </Button>

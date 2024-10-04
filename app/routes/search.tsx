@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useLoaderData, useSearchParams, useFetcher, useNavigation } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { useLoaderData, useSearchParams, useFetcher, useNavigation, useLocation } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import { getSession } from "~/sessions";
 import type { Dog, DogsSearchResponse, DogFilter } from "~/utils/types";
@@ -73,8 +73,10 @@ export default function Search () {
   const [searchParams] = useSearchParams();
   const fetcher = useFetcher();
   const navigation = useNavigation();
+  const location = useLocation();
 
   const [filters, setFilters] = useState<Partial<DogFilter>>(searchParamToFilter(searchParams));
+  const [filtersChanged, setFiltersChanged] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -88,13 +90,19 @@ export default function Search () {
     });
   };
 
+  useEffect(() => {
+    setFiltersChanged(false);
+  }, [location.search]);
+
   return (
     <main className="flex w-screen h-screen items-center justify-center overflow-hidden relative">
       <section className="h-full flex-shrink-0x">
         <Filters 
           isLoading={fetcher.state !== "idle" || navigation.state !== "idle"} 
           filters={filters} 
-          setFilters={setFilters} 
+          setFilters={setFilters}
+          filtersChanged={filtersChanged}
+          setFiltersChanged={setFiltersChanged}
           handleSubmit={handleSubmit}
         />
       </section>

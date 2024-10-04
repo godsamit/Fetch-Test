@@ -1,7 +1,8 @@
+import type { Libraries } from '@react-google-maps/api';
+import type { Location } from '~/utils/types';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useFetcher, useSearchParams } from '@remix-run/react';
 import { useJsApiLoader, GoogleMap, StandaloneSearchBox } from '@react-google-maps/api';
-import type { Libraries } from '@react-google-maps/api';
 import { Input } from '~/components/ui/input';
 import { MAP_LIBRARIES } from '~/utils/constants';
 import { LoaderIcon } from 'lucide-react';
@@ -19,7 +20,13 @@ import { LoaderIcon } from 'lucide-react';
 export const MapWithBoundingBox = ({ 
   onBoundingBoxChange
 } : {
-  onBoundingBoxChange: (boundingBox: { top_right: { lat: number, lon: number }, bottom_left: { lat: number, lon: number } }) => void
+  onBoundingBoxChange: (
+    boundingBox: { 
+      top_right: Location, 
+      bottom_left: Location 
+    }, 
+    silent?: boolean
+  ) => void
 }) => {
   // Ensure this component runs on the client side
   const [isClient, setIsClient] = useState(false);
@@ -120,11 +127,10 @@ export const MapWithBoundingBox = ({
       if (bounds) {
         const northEast = bounds.getNorthEast();
         const southWest = bounds.getSouthWest();
-
         onBoundingBoxChange({
           top_right: { lat: northEast.lat(), lon: northEast.lng() },
           bottom_left: { lat: southWest.lat(), lon: southWest.lng() },
-        });
+        }, !initFetched);
       }
     }
   };
