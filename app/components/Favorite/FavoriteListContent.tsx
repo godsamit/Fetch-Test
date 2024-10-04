@@ -53,6 +53,7 @@ export const FavoriteListContent = ({
       <section className="mt-auto flex-shrink-0 self-end">
         <Button 
           size="lg" 
+          className="text-lg"
           onClick={handleSubmit}
           variant={isLoading ? "secondary" : "default"}
           disabled={favorites.length === 0 || isLoading}
