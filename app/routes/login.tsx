@@ -75,7 +75,7 @@ export default function Login() {
       <Card className="w-[clamp(20rem,500px,80vw)] p-10">
         <div className="flex flex-col items-center justify-center my-6 gap-2.5">
           <img className="w-32 h-32" src="/fetch_rewards_logo.jpg" alt="Fetch Rewards Logo" />
-          <h1 className="text-3xl font-bold">Fetch Dog Search</h1>
+          <h1 className="text-3xl text-center font-bold">Fetch Dog Search</h1>
           <p className="text-base text-center">Find the shelter dog of your dreams with this React/Remix app!</p>
         </div>
         {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
