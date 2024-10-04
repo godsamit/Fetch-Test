@@ -56,7 +56,7 @@ export const DogList = ({
         </section>
       }
       {navigation.state==="idle" && 
-        <section className="flex min-h-0 overflow-y-auto flex-wrap gap-4">
+        <section className="flex min-h-0 overflow-y-auto flex-wrap justify-center gap-4">
           {dogs?.map((dog) => (
             <DogCard 
               key={dog.id} 

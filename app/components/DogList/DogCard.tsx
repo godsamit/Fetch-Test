@@ -51,7 +51,7 @@ export const DogCard = ({
 }) => {
 
   return (
-    <article className="basis-[16rem] flex-shrink-0">
+    <article className="basis-[14rem] md:basis-[16rem] flex-shrink-0">
       <Card>
         <img 
           src={dog.img} 
@@ -68,7 +68,7 @@ export const DogCard = ({
               />
             </div>
             <h2 className="text-base text-primary">{dog.breed}</h2>
-          <div className="flex justify-between mt-1.5" >
+          <div className="flex flex-col md:flex-row justify-between mt-1.5" >
             <h3 className="text-sm opacity-50 font-bold">Age: {dog.age}</h3>
             <h4 className="text-sm opacity-50 font-bold">Zip Code: {dog.zip_code}</h4>
           </div>

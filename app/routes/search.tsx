@@ -96,16 +96,14 @@ export default function Search () {
 
   return (
     <main className="flex w-screen h-screen items-center justify-center overflow-hidden relative">
-      <section className="h-full flex-shrink-0x">
-        <Filters 
-          isLoading={fetcher.state !== "idle" || navigation.state !== "idle"} 
-          filters={filters} 
-          setFilters={setFilters}
-          filtersChanged={filtersChanged}
-          setFiltersChanged={setFiltersChanged}
-          handleSubmit={handleSubmit}
-        />
-      </section>
+      <Filters 
+        isLoading={fetcher.state !== "idle" || navigation.state !== "idle"} 
+        filters={filters} 
+        setFilters={setFilters}
+        filtersChanged={filtersChanged}
+        setFiltersChanged={setFiltersChanged}
+        handleSubmit={handleSubmit}
+      />
       <section className="flex-1 h-full bg-muted">
         <DogList dogs={dogs} dogSearchMeta={dogSearchMeta} />
       </section>

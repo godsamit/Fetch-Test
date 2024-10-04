@@ -34,7 +34,7 @@ export const MapFilter = ({
         delayDuration={100}
       >
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="hidden md:block">
             <Badge
               className="mt-2 text-xs cursor-pointer flex items-center gap-1"
               variant="secondary"

@@ -3,6 +3,7 @@ import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { Heart } from "lucide-react";
 import { Dog } from "~/utils/types";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 export const SidePanelRight = ({
   children,
@@ -34,7 +35,7 @@ export const SidePanelRight = ({
     <>
       <div
         className={cn(
-          "fixed inset-0 bg-black/10 backdrop-blur-md transition-opacity duration-500",
+          "fixed inset-0 bg-black/10 backdrop-blur-md transition-opacity duration-500 z-10",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none" 
         )}
         onClick={() => setIsOpen(false)}
@@ -49,7 +50,7 @@ export const SidePanelRight = ({
       />
       <aside 
         className={cn(
-          "transition-translate duration-1000 ease-in-out h-screen absolute right-12 w-[918px] flex transform translate-x-full",
+          "transition-translate duration-1000 ease-in-out h-screen absolute right-12 w-[calc(100%+3rem)] md:w-[918px] flex transform translate-x-full z-10",
           isOpen && "translate-x-12"
         )}
       >
@@ -58,6 +59,7 @@ export const SidePanelRight = ({
             onClick={() => setIsOpen(!isOpen)} 
             className="relative rounded-r-none w-12 p-0 h-12 hover:bg-primary"
             title={`You have ${favorites.length} favorite dog${favorites.length > 1 ? "s" : ""}`}
+            aria-label="Open favorite panel"
           >
             <Heart className="w-6 h-6" />
             {isPinging &&
@@ -74,6 +76,15 @@ export const SidePanelRight = ({
             </div>
           </Button>
         </div>
+        {isOpen &&
+          <button 
+            className="absolute top-4 right-4 block md:hidden" 
+            title="Close sidebar"
+            onClick={() => setIsOpen(false)}
+          >
+            <Cross1Icon className="w-6 h-6 text-gray-500"/>
+          </button>
+        }
         {children}
       </aside>
     </>
